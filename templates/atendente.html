@@ -1,0 +1,78 @@
+{% extends 'base.html' %} {% block content %}
+
+<h2 class="titulo-secundario">Nova Reserva</h2>
+<form action="/atendente/criar" method="post" class="formulario-reserva">
+  <div class="campo">
+    <label for="nome_responsavel_input">Nome do responsável:</label>
+    <input
+      class="campo-input"
+      name="nome_responsavel"
+      placeholder="Nome do responsável"
+      required
+    />
+  </div>
+  <div class="campo">
+    <label for="data_input">Data da reserva:</label>
+    <input type="date" class="campo-input" name="data" required />
+  </div>
+  <div class="campo">
+    <label for="hora_input">Hora da reserva (2h em 2h):</label>
+    <input
+      type="time"
+      class="campo-input"
+      name="hora"
+      min="12:00"
+      max="22:00"
+      step="7200"
+      required
+    />
+  </div>
+  <div class="campo">
+    <label for="numero_mesa">Número da mesa:</label>
+    <input
+      type="number"
+      class="campo-input"
+      name="numero_mesa"
+      min="1"
+      max="20"
+      placeholder="Número da mesa (1 a 20)"
+      required
+    />
+  </div>
+  <div class="campo">
+    <label for="qtd_pessoas_input">Quantidade de pessoas:</label>
+    <input
+      type="number"
+      class="campo-input"
+      name="qtd_pessoas"
+      min="1"
+      max="10"
+      placeholder="Número de pessoas (1 a 10)"
+      required
+    />
+  </div>
+  <div class="campo">
+    <button class="botao" id="botao-criar-reserva" type="submit">
+      Criar Reserva
+    </button>
+  </div>
+</form>
+
+<h2 class="titulo-secundario">Reservas</h2>
+<ul class="lista-reservas">
+  {% for r in reservas %}
+  <li class="item-reserva">
+    {{r.nome_responsavel}} - {{r.data}} {{r.hora}} - Mesa {{r.numero_mesa}} -
+    {{r.status}} {% if r.status == 'reservada' %}
+    <form
+      action="{{ url_for('cancelar_reserva', id=r.id) }}"
+      method="post"
+      class="form-inline"
+    >
+      <button type="submit" class="botao botao--erro">Cancelar</button>
+    </form>
+    {% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}

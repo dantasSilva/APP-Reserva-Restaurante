@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reserva Restaurante</title>
+    <link rel="stylesheet" href="../static/css/style.css" />
+  </head>
+  <body class="pagina-principal">
+    <div class="container-principal">
+      <h1 class="titulo-primario">Reserva Restaurante</h1>
+      <nav class="menu">
+        <a href="/" class="botao-menu">Início</a>
+        <a href="/atendente" class="botao-menu-atendente">Atendente</a>
+        <a href="/garcom" class="botao-menu-garcom">Garçom</a>
+        <a href="/gerente" class="botao-menu-gerente">Gerente</a>
+      </nav>
+      {% block content %}{% endblock %}
+    </div>
+
+    <div id="popup" class="popup">
+      <span id="popup-texto"></span>
+    </div>
+
+    {% if mensagem %}
+    <div
+      id="mensagem-data"
+      data-mensagem="{{ mensagem }}"
+      data-tipo="{{ tipo | default('') }}"
+    ></div>
+    {% endif %}
+
+    <script src="../static/js/script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,26 @@
+{% extends 'base.html' %} {% block content %}
+<h2 class="titulo-secundario">Confirmar Reservas</h2>
+<ul class="lista-reservas">
+  {% for r in reservas %}
+  <li class="item-reserva">
+    <div>
+      {{r.nome_responsavel}} - {{r.data}} {{r.hora}} - Mesa {{r.numero_mesa}}
+    </div>
+    <form
+      action="/garcom/confirmar/{{r.id}}"
+      method="post"
+      class="formulario-confirmar"
+    >
+      <input
+        id="nome-garcom-{{r.id}}"
+        class="campo-input-garcom"
+        name="garcom"
+        placeholder="Nome do Garçom"
+        required
+      />
+      <button class="botao" id="botao-confirmar-reserva">Confirmar</button>
+    </form>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}

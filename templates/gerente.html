@@ -1,0 +1,83 @@
+{% extends 'base.html' %} {% block content %}
+<h2 class="titulo-secundario">Relatórios</h2>
+
+<form
+  action="{{ url_for('gerar_relatorio') }}"
+  method="get"
+  class="formulario-relatorio"
+>
+  <div class="campo">
+    <label class="label-relatorio">Tipo de Relatório:</label>
+    <select
+      name="tipo"
+      id="tipo-relatorio"
+      class="campo-input"
+      required
+      onchange="atualizarCampos()"
+    >
+      <option value="">Selecione</option>
+      <option value="periodo">Relação de Reservas</option>
+      <option value="mesa">Reservas por Mesa</option>
+      <option value="garcom">Relação de Mesas Confirmadas por Garçom</option>
+    </select>
+  </div>
+
+  <div class="campo-periodo" id="campo-periodo" style="display: none">
+    <label>Data Inicial:</label>
+    <input type="date" name="data_inicial" class="campo-input" />
+    <label>Data Final:</label>
+    <input type="date" name="data_final" class="campo-input" />
+  </div>
+
+  <div class="campo-mesa" id="campo-mesa" style="display: none">
+    <label>Número da Mesa:</label>
+    <input
+      type="number"
+      name="numero_mesa"
+      min="1"
+      max="20"
+      class="campo-input"
+    />
+  </div>
+
+  <button type="submit" class="botao-gerar">Gerar Relatório</button>
+</form>
+
+{% if tipo_relatorio %}
+<h4 class="titulo-quartenario">Resultado:</h4>
+<h3 class="titulo-terciario" id="titulo-relatorio">
+  {% if tipo_relatorio == 'periodo' %} Relação de Reservas por Período {% elif
+  tipo_relatorio == 'mesa' %} Reservas por Mesa {% elif tipo_relatorio ==
+  'garcom' %} Relação de Mesas Confirmadas por Garçom {% endif %}
+</h3>
+
+{% if tipo_relatorio == 'periodo' or tipo_relatorio == 'mesa' %} {% if reservas
+%}
+<ul class="lista-reservas">
+  {% for r in reservas %}
+  <li class="item-reserva">
+    {{r.nome_responsavel}} - {{r.data}} {{r.hora}} - Mesa {{r.numero_mesa}} -
+    {{r.status}} {% if r.garcom_confirmador %} (Confirmado por
+    {{r.garcom_confirmador}}) {% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<div id="popup-relatorio" class="popup-relatorio">
+  Nenhuma reserva encontrada para os critérios selecionados.
+</div>
+{% endif %} {% elif tipo_relatorio == 'garcom' %} {% if relatorio_por_garcom %}
+{% for garcom, reservas in relatorio_por_garcom.items() %}
+<h5 class="titulo-quinario">{{garcom}}:</h5>
+<ul class="lista-reservas">
+  {% for r in reservas %}
+  <li class="item-reserva">
+    {{r.nome_responsavel}} - {{r.data}} {{r.hora}} - Mesa {{r.numero_mesa}}
+  </li>
+  {% endfor %}
+</ul>
+{% endfor %} {% else %}
+<div id="popup-relatorio" class="popup-relatorio">
+  Nenhuma mesa confirmada encontrada.
+</div>
+{% endif %} {% endif %} {% endif %} {% endblock %}
